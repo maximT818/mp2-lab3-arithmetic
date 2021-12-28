@@ -5,11 +5,6 @@
 
 TEST(Token, can_create_token)
 {
-	ASSERT_NO_THROW(Token token);
-}
-
-TEST(Token, can_create_token)
-{
 	ASSERT_NO_THROW(Token token(5.0));
 }
 
@@ -29,17 +24,6 @@ TEST(Token, can_get_value)
 {
 	Token token(5.0);
 	ASSERT_NO_THROW(token.GetValue());
-}
-
-TEST(Token, can_get_value)
-{
-	Token token(5.0);
-	ASSERT_NO_THROW(token.GetType());
-}
-
-TEST(Arithmetic, can_create_line)
-{
-	ASSERT_NO_THROW(Arithmetic ar);
 }
 
 TEST(Arithmetic, can_create_line)
@@ -148,6 +132,27 @@ TEST(Arithmetic, you_can_not_have_two_operations_in_a_row)
 	ASSERT_ANY_THROW(ar.CorrectionCalcul());
 }
 
+TEST(Arithmetic, can_use_space)
+{
+	Arithmetic ar;
+	std::string st0 = "5 + 5";
+	ASSERT_NO_THROW(ar.TransformToTokens(st0));
+}
+
+TEST(Arithmetic, can_use_variables)
+{
+	Arithmetic ar;
+	std::string st0 = "x*y";
+	ar.TransformToTokens(st0);
+	ASSERT_NO_THROW(ar.CorrectionCalcul());
+}
+
+TEST(Arithmetic, can_not_be_more_than_one_point)
+{
+	Arithmetic ar;
+	std::string st0 = "6/1.2.3";
+	ASSERT_ANY_THROW(ar.TransformToTokens(st0));
+}
 
 
 

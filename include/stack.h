@@ -21,6 +21,7 @@ private:
 	int Size; //индекс максимального
 	int MaxSize; //максимальное кол-во элементов
 	ValType* pVector;
+	bool IsFull();
 public:
 	Stack();
 	Stack(int maxSize);
@@ -29,7 +30,6 @@ public:
 	int GetSize() { return (Size + 1); }
 	int GetMaxSize() { return MaxSize; }
 	bool IsEmpty();
-	bool IsFull();
 	void push(ValType value);
 	ValType pop();
 	ValType show();
@@ -38,10 +38,10 @@ public:
 };
 
 template <typename ValType>
-Stack<ValType>::Stack() : Size(-1), MaxSize(8), pVector(new ValType[MaxSize]) {}
+Stack<ValType>::Stack() : Size(-1), MaxSize(8), pVector(new ValType[MaxSize]{}) {}
 
 template <typename ValType>
-Stack<ValType>::Stack(int maxSize) : Size(-1), MaxSize(maxSize), pVector(new ValType[MaxSize]) {}
+Stack<ValType>::Stack(int maxSize) : Size(-1), MaxSize(maxSize), pVector(new ValType[MaxSize]{}) {}
 
 template <typename ValType>
 Stack<ValType>::Stack(const Stack& st0) : Size(-1), MaxSize(st0.MaxSize) 
@@ -63,10 +63,7 @@ Stack<ValType>::Stack(const Stack& st0) : Size(-1), MaxSize(st0.MaxSize)
 template<typename ValType>
 Stack<ValType>::~Stack()
 {
-	if (!this->IsEmpty())
-	{
-		delete pVector;
-	}
+	delete[] pVector;
 }
 
 template<typename ValType>
@@ -143,42 +140,38 @@ ValType Stack<ValType>::show()
 template<typename ValType>
 bool Stack<ValType>::operator==(const Stack<ValType>& st0) const
 {
-	if (this->MaxSize == st0.MaxSize)
+	if (this->Size == st0.Size)
 	{
-		for (int i = 0; i < std::max(this->Size, st0.Size); i++)
+		for (int i = 0; i < Size; i++)
 		{
-			if (this->pVector[i] == st0.pVector[i])
+			if (this->pVector[i] != st0.pVector[i])
 			{
 				return 0;
 			}
 		}
+
 		return 1;
 	}
 	else
 	{
 		return 0;
 	}
+	
 }
 
 template<typename ValType>
 Stack<ValType>& Stack<ValType>::operator=(Stack<ValType>& st0)
 {
-	if (this->MaxSize != st0.MaxSize)
+	if (!(* st0 == *this))
 	{
 		delete this->pVector;
-		this->pVector = new ValType[MaxSize];
+		this->pVector = new ValType[st0.MaxSize];
+		this->Size = st0.Size;
 
-		for (int i = 0; i < MaxSize; i++)
+		for (int i = 0; i < st0.MaxSize; i++)
 		{
 			this->pVector[i] = 0;
 		}
-	}
-
-	this->Size = st0.Size;
-
-	for (int i = 0; i < this->Size; i++)
-	{
-		this->pVector[i] = st0.pVector[i];
 	}
 
 	return *this;

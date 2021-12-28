@@ -49,37 +49,29 @@ void Token::ShowToken()
 
 int Token::OperationWeight()
 {
-	if (op == ")")
+	if (op == "+")
 	{
-		return 1;
-	}
-	else if (op == "(")
-	{
-		return 2;
-	}
-	else if (op == "+")
-	{
-		return 4;
+		return 0;
 	}
 	else if (op == "-")
 	{
-		return 4;
+		return 0;
 	}
 	else if (op == "*")
 	{
-		return 8;
+		return 1;
 	}
 	else if (op == "/")
 	{
-		return 8;
+		return 1;
 	}
 	else if (op == "@")
 	{
-		return 16;
+		return 2;
 	}
 	else
 	{
-		return 0;//To implement comparison in an empty stack (273 string)
+		return -1;//To implement comparison in an empty stack (273 string)
 	}
 }
 
@@ -91,8 +83,9 @@ void Arithmetic::Show()
 	}
 }
 
-void Arithmetic::SubstituteValues(Arithmetic& str0)
+bool Arithmetic::SubstituteValues(Arithmetic& str0)
 {
+	bool flag = 0;
 	for (int i = 0; i < line.size(); i++)
 	{
 		double value;
@@ -111,9 +104,10 @@ void Arithmetic::SubstituteValues(Arithmetic& str0)
 					str0.line[i] = valT;
 				}
 			}
-
+			flag = 1;
 			break;
 		}
+		
 	}
 
 	for (int i = 0; i < line.size(); i++)
@@ -134,9 +128,10 @@ void Arithmetic::SubstituteValues(Arithmetic& str0)
 					str0.line[i] = valT;
 				}
 			}
-
+			flag = 1;
 			break;
 		}
+		
 	}
 
 	for (int i = 0; i < line.size(); i++)
@@ -157,10 +152,13 @@ void Arithmetic::SubstituteValues(Arithmetic& str0)
 					str0.line[i] = valT;
 				}
 			}
-
+			flag = 1;
 			break;
 		}
+		
 	}
+
+	return flag;
 }
 
 void Arithmetic::TransformToTokens(std::string& str0)
@@ -186,6 +184,11 @@ void Arithmetic::TransformToTokens(std::string& str0)
 			{
 				stringSaver += str0[i];
 				i++;
+				
+				if (str0[i] == '.')
+				{
+					dotCounter++;
+				}
 
 				if (dotCounter > 1)
 				{
@@ -228,6 +231,10 @@ void Arithmetic::TransformToTokens(std::string& str0)
 		{
 			Token bracket(str0[i]);
 			line.push_back(bracket);
+			i++;
+		}
+		else if (str0[i] == ' ')
+		{
 			i++;
 		}
 		else
@@ -277,7 +284,7 @@ void Arithmetic::PostFix()
 				}
 
 			}
-			
+
 			opStack.push(line[i]);
 		}
 	}
@@ -288,7 +295,7 @@ void Arithmetic::PostFix()
 		Token saver(opStack.pop());
 		PostFixLine.push_back(saver);
 	}
-
+	
 	//Changing the pointer
 	line = PostFixLine;
 }
@@ -375,7 +382,7 @@ bool Arithmetic::BracketsCalcul()
 			
 			counter++;
 		}
-		else if (line[i].GetOperation() == ")" && (counter > 0))
+		else if (line[i].GetOperation() == ")" && (counter >= 0))
 		{
 			if (i >= 1)
 			{
@@ -427,7 +434,20 @@ double Arithmetic::CorrectionCalcul()
 			{
 				throw "Operation after operation";
 			}
-			else if ((line[i].GetType() && line[i + 1].GetType()) || (line[i].GetType() && (line[i + 1].GetOperation() == "x" || line[i + 1].GetOperation() == "y" || line[i + 1].GetOperation() == "z")) || (line[i + 1].GetType() && (line[i].GetOperation() == "x" || line[i].GetOperation() == "y" || line[i].GetOperation() == "z")) || ((line[i].GetOperation() == "x" || line[i].GetOperation() == "y" || line[i].GetOperation() == "z") && (line[i].GetOperation() == "x" || line[i].GetOperation() == "y" || line[i].GetOperation() == "z")))
+			else if ((line[i].GetType() && line[i + 1].GetType()))
+			{
+				throw "Value after value";
+			}
+			else if ((line[i].GetType() && (line[i + 1].GetOperation() == "x" || line[i + 1].GetOperation() == "y" || line[i + 1].GetOperation() == "z")))
+			{
+				throw "Value after value";
+			}
+			else if ((line[i + 1].GetType() && (line[i].GetOperation() == "x" || line[i].GetOperation() == "y" || line[i].GetOperation() == "z")))
+			{
+				throw "Value after value";
+
+			}
+			else if (((line[i].GetOperation() == "x" || line[i].GetOperation() == "y" || line[i].GetOperation() == "z") && (line[i + 1].GetOperation() == "x" || line[i + 1].GetOperation() == "y" || line[i + 1].GetOperation() == "z")))
 			{
 				throw "Value after value";
 			}

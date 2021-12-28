@@ -59,5 +59,5 @@ public:
 	double CorrectionCalcul();
 	void Show();
 	void TransformToTokens(std::string& str0);
-	void SubstituteValues(Arithmetic& str0);
+	bool SubstituteValues(Arithmetic& str0);
 };
