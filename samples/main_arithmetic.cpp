@@ -4,71 +4,76 @@
 
 int main()
 {
-	try {
-		
-		
-		std::string check = " ";
+	int k = 0;
+	std::string check = " ";
+	while (check != "yes")
+	{
+		try {
+				Arithmetic result;
+				Arithmetic result_0;
+				std::string str;
+				bool flag;
 
-		do
-		{
-			Arithmetic result;
-			Arithmetic result_0;
-			std::string str = " ";
-			bool flag;
+				std::cout << "Enter tokens line: " << std::endl;
+				
+				if (k > 0)
+				{
+					std::cin.ignore();
+				}
+				
+				getline(std::cin, str);
 
-			std::cout << "Enter tokens line: " << std::endl;
-			std::cin >> str;
+				result.TransformToTokens(str);
 
-			result.TransformToTokens(str);
-
-			if (result.CorrectionCalcul())
-			{
-				std::string check2 = "yes";
-				result.PostFix();
-				std::cout << std::endl;
-
-				result.Show();
-				std::cout << std::endl;
-
-				result_0 = result;
-
-				flag = result.SubstituteValues(result);
-				std::cout << "Result: " << result.firstCalcul();
 				
 
-				while ((check2 == "yes") && flag)
+				if (result.CorrectionCalcul())
 				{
-					
+					std::string check2 = "yes";
+					result.PostFix();
 					std::cout << std::endl;
-					std::cout << "Do you want to substitute other values?" << std::endl;
-					std::cout << "If yes, then enter yes " << std::endl;
-					std::cin >> check2;
-					if (check2 == "yes")
+
+					/*result.Show();
+					std::cout << std::endl;*/
+
+					result_0 = result;
+
+					flag = result.SubstituteValues(result);
+					std::cout << "Result: " << result.firstCalcul();
+
+
+					while ((check2 == "yes") && flag)
 					{
-						result = result_0;
-						result.SubstituteValues(result);
-						std::cout << "Result: " << result.firstCalcul();
+
+						std::cout << std::endl;
+						std::cout << "Do you want to substitute other values?" << std::endl;
+						std::cout << "If yes, then enter yes " << std::endl;
+						std::cin >> check2;
+						if (check2 == "yes")
+						{
+							result = result_0;
+							result.SubstituteValues(result);
+							std::cout << "Result: " << result.firstCalcul();
+						}
+
+
 					}
-					
-
 				}
-			}
 
-			std::cout << std::endl;
-			std::cout << "Do you want to get out?" << std::endl;
+				std::cout << std::endl;
+				std::cout << "Do you want to get out?" << std::endl;
 
-			std::cout << "If yes, then enter yes " << std::endl;
-			std::cin >> check;
+				std::cout << "If yes, then enter yes " << std::endl;
+				std::cin >> check;
 
-			std::cout << std::endl;
+				std::cout << std::endl;
+				k++;
 
-		}while (check != "yes");
-		
+		}
+		catch (char* er)
+		{
+			std::cout << er << std::endl;
+		}
 	}
-	catch (char* er)
-	{
-		std::cout << er << std::endl;
-	}
-
   return 0;
 }
