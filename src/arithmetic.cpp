@@ -88,20 +88,31 @@ bool Arithmetic::SubstituteValues(Arithmetic& str0)
 	bool flag = 0;
 	for (int i = 0; i < line.size(); i++)
 	{
-		double value;
+		std::string value;
+		Arithmetic valueTokens;
 		Token saver(str0.line[i]);
 		if (saver.GetOperation() == "x")
 		{
 			std::cout << "Enter x: ";
 			std::cin >> value;
 
+			valueTokens.TransformToTokens(value);
+
+			for (int i = 0; i < valueTokens.GetSize(); i++)
+			{
+				if (!valueTokens.GetTokenI(i).GetType())
+				{
+					throw "Invalid type";
+				}
+			}
+
 			for (int j = 0; j < line.size(); j++)
 			{
 				saver = str0.line[j];
-				Token valT(value);
+				valueTokens.GetTokenI(0);
 				if (saver.GetOperation() == "x")
 				{
-					str0.line[i] = valT;
+					str0.line[i] = valueTokens.GetTokenI(0);
 				}
 			}
 			flag = 1;
@@ -112,50 +123,72 @@ bool Arithmetic::SubstituteValues(Arithmetic& str0)
 
 	for (int i = 0; i < line.size(); i++)
 	{
-		double value;
+		std::string value;
+		Arithmetic valueTokens;
 		Token saver(str0.line[i]);
 		if (saver.GetOperation() == "y")
 		{
 			std::cout << "Enter y: ";
 			std::cin >> value;
 
+			valueTokens.TransformToTokens(value);
+
+			for (int i = 0; i < valueTokens.GetSize(); i++)
+			{
+				if (!valueTokens.GetTokenI(i).GetType())
+				{
+					throw "Invalid type";
+				}
+			}
+
 			for (int j = 0; j < line.size(); j++)
 			{
 				saver = str0.line[j];
-				Token valT(value);
+				valueTokens.GetTokenI(0);
 				if (saver.GetOperation() == "y")
 				{
-					str0.line[i] = valT;
+					str0.line[i] = valueTokens.GetTokenI(0);
 				}
 			}
 			flag = 1;
 			break;
 		}
-		
+
 	}
 
 	for (int i = 0; i < line.size(); i++)
 	{
-		double value;
+		std::string value;
+		Arithmetic valueTokens;
 		Token saver(str0.line[i]);
 		if (saver.GetOperation() == "z")
 		{
 			std::cout << "Enter z: ";
 			std::cin >> value;
 
+			valueTokens.TransformToTokens(value);
+
+			for (int i = 0; i < valueTokens.GetSize(); i++)
+			{
+				if (!valueTokens.GetTokenI(i).GetType())
+				{
+					throw "Invalid type";
+				}
+			}
+
 			for (int j = 0; j < line.size(); j++)
 			{
 				saver = str0.line[j];
-				Token valT(value);
+				valueTokens.GetTokenI(0);
 				if (saver.GetOperation() == "z")
 				{
-					str0.line[i] = valT;
+					str0.line[i] = valueTokens.GetTokenI(0);
 				}
 			}
 			flag = 1;
 			break;
 		}
-		
+
 	}
 
 	return flag;
